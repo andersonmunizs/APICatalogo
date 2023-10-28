@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using APICatalogo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -13,6 +14,44 @@ namespace APICatalogo.Controllers
         public ProdutosController(AppDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Produto>> Get() //ActionResult é necessário para o return da condicional
+        {
+            var produtos = _context.Produtos.ToList();
+            if(produtos is null)
+            {
+                return NotFound("Produtos não encontrados...");
+            }
+            return produtos;
+        }
+
+        [HttpGet("{id:int}", Name = "ObterProduto")]
+
+        public ActionResult<Produto> Get(int id) //ActionResult é necessário para o return da condicional
+        {
+            var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
+            if(produto is null) 
+            {
+                return NotFound("Produto não encontrado");            
+            }
+            return produto;
+        }
+
+        [HttpPost]
+        public ActionResult Post(Produto produto)
+        {
+            if (produto is null)
+            {
+                return BadRequest();
+            }
+
+            _context.Produtos.Add(produto);
+            _context.SaveChanges(); //Para salvar no BD
+
+            return new CreatedAtRouteResult("ObterProduto", //Rota ObterProduto
+                new { id = produto.ProdutoId }, produto);
         }
     }
 }
