@@ -17,7 +17,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> Get() //ActionResult é necessário para o return da condicional
+        public ActionResult<IEnumerable<Produto>> Get() //ActionResult é necessário para o return
         {
             var produtos = _context.Produtos.ToList();
             if(produtos is null)
@@ -29,7 +29,7 @@ namespace APICatalogo.Controllers
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
 
-        public ActionResult<Produto> Get(int id) //ActionResult é necessário para o return da condicional
+        public ActionResult<Produto> Get(int id) //ActionResult é necessário para o return
         {
             var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
             if(produto is null) 
